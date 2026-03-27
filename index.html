@@ -218,7 +218,7 @@
     <h1>🧬 全面健康自测</h1>
     <div class="tagline">了解你的真实健康状态</div>
     <p>10个维度 · 100道题<br>生理 · 心理 · 饮食 · 运动 · 社交<br>工作 · 性生活 · 生活方式 · 遗传 · 环境</p>
-    <button class="start-btn" onclick="startTest()">开始测评 →</button>
+    <button class="start-btn" ontouchend="startTest()" onclick="startTest()">开始测评 →</button>
   </div>
 
   <!-- 答题区 -->
@@ -244,7 +244,7 @@
       <strong>📸 截图分享</strong>
       长按保存上方雷达图，发小红书/朋友圈都可以
     </div>
-    <button class="retest-btn" onclick="resetTest()">重新测评 ↺</button>
+    <button class="retest-btn" ontouchend="resetTest" onclick="resetTest()">重新测评 ↺</button>
   </div>
 
 </div>
@@ -355,8 +355,8 @@ function renderSection() {
       <div class="question-item">
         <div class="question-text">${qIdx + 1}. ${cat.questions[i]}</div>
         <div class="answer-btns">
-          <button class="btn-yes ${saved === 1 ? 'selected' : ''}" onclick="selectAnswer(${qIdx}, 1)">✅ 是</button>
-          <button class="btn-no ${saved === 0 ? 'selected' : ''}" onclick="selectAnswer(${qIdx}, 0)">❌ 否</button>
+          <button class="btn-yes ${saved === 1 ? 'selected' : ''}" ontouchend="selectAnswer" onclick="selectAnswer(${qIdx}, 1)">✅ 是</button>
+          <button class="btn-no ${saved === 0 ? 'selected' : ''}" ontouchend="selectAnswer" onclick="selectAnswer(${qIdx}, 0)">❌ 否</button>
         </div>
       </div>
     `;
@@ -364,8 +364,8 @@ function renderSection() {
   
   html += `</div>
     <div class="nav-btns">
-      ${currentSection > 0 ? '<button class="btn-prev" onclick="prevSection()">← 上一组</button>' : '<div></div>'}
-      <button class="btn-next" onclick="nextSection()">
+      ${currentSection > 0 ? '<button class="btn-prev" ontouchend="prevSection" onclick="prevSection()">← 上一组</button>' : '<div></div>'}
+      <button class="btn-next" ontouchend="nextSection" onclick="nextSection()">
         ${currentSection < 9 ? '下一组 →' : '查看结果 →'}
       </button>
     </div>`;
@@ -377,7 +377,7 @@ function selectAnswer(qIdx, val) {
   answers[qIdx] = val;
   const btns = document.querySelectorAll(`.btn-yes, .btn-no`);
   btns.forEach(b => b.classList.remove('selected'));
-  document.querySelectorAll(`button[onclick="selectAnswer(${qIdx}, ${val})"]`).forEach(b => b.classList.add('selected'));
+  document.querySelectorAll(`button[ontouchend="selectAnswer" onclick="selectAnswer(${qIdx}, ${val})"]`).forEach(b => b.classList.add('selected'));
 }
 
 function nextSection() {
