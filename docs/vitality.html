@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- 百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?43bbc21ca2dec962dd61345eb1379927";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生命力测评 | 老姜</title>
+<!-- 百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?替换为你的百度统计ID";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #333;
+    min-height: 100vh;
+  }
+  .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+  
+  /* 封面 */
+  .cover {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 28px; margin-bottom: 15px; }
+  .cover .tagline { font-size: 18px; color: #e94560; font-weight: bold; margin-bottom: 20px; }
+  .cover p { font-size: 14px; opacity: 0.8; line-height: 1.8; }
+  .start-btn {
+    margin-top: 30px;
+    background: #e94560;
+    color: white;
+    border: none;
+    padding: 16px 50px;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .start-btn:hover { transform: scale(1.05); background: #ff6b6b; }
+  
+  /* 进度 */
+  .progress-bar {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e94560, #ff6b6b);
+    border-radius: 10px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+  .progress-text {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 15px;
+  }
+  
+  /* 测评页面 */
+  .quiz-page { display: none; }
+  .quiz-page.active { display: block; }
+  
+  .question-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  
+  .question-text {
+    font-size: 16px;
+    color: #222;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .option-btn {
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover { border-color: #e94560; }
+  .option-btn.selected { 
+    background: #e94560; 
+    color: white; 
+    border-color: #e94560;
+  }
+  
+  .nav-btns {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+  }
+  .btn-prev {
+    padding: 14px 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .btn-next {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #e94560;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .btn-next:disabled { background: #999; cursor: not-allowed; }
+  
+  /* 结果页面 */
+  .result-page { display: none; text-align: center; }
+  .result-page.active { display: block; }
+  
+  .result-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px 25px;
+    margin-bottom: 20px;
+  }
+  
+  .score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+  }
+  .score-circle.high { background: linear-gradient(135deg, #4caf50, #66bb6a); }
+  .score-circle.medium { background: linear-gradient(135deg, #ff9800, #ffb74d); }
+  .score-circle.low { background: linear-gradient(135deg, #e94560, #ff6b6b); }
+  
+  .result-title { font-size: 22px; margin-bottom: 10px; color: #1a1a2e; }
+  .result-desc { font-size: 14px; color: #666; line-height: 1.8; }
+  
+  .dimension-scores {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 25px;
+  }
+  .dimension-item {
+    background: #f7f8fa;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: left;
+  }
+  .dimension-name { font-size: 13px; color: #888; margin-bottom: 5px; }
+  .dimension-value { font-size: 20px; font-weight: bold; }
+  .dimension-value.high { color: #4caf50; }
+  .dimension-value.medium { color: #ff9800; }
+  .dimension-value.low { color: #e94560; }
+  
+  .tip-card {
+    background: linear-gradient(135deg, #0f3460, #1a1a2e);
+    color: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .tip-card h3 { font-size: 16px; margin-bottom: 12px; color: #e94560; }
+  .tip-card p { font-size: 14px; line-height: 1.8; opacity: 0.9; }
+  
+  .retest-btn {
+    background: white;
+    color: #e94560;
+    border: 2px solid #e94560;
+    padding: 14px 50px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 30px;
+    padding-bottom: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 封面 -->
+  <div class="cover" id="coverPage">
+    <h1>🔋 生命力测评</h1>
+    <div class="tagline">你的"电量"还剩多少？</div>
+    <p>
+      你是否觉得精力大不如前？<br>
+      对生活越来越提不起兴趣？<br>
+      这个测评帮你找到答案
+    </p>
+    <button class="start-btn" onclick="startTest()">开始测评</button>
+  </div>
+
+  <!-- 测评页面 -->
+  <div class="quiz-page" id="quizPage">
+    <div class="progress-text" id="progressText">第 1/20 题</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionContainer"></div>
+  </div>
+
+  <!-- 结果页面 -->
+  <div class="result-page" id="resultPage">
+    <div class="result-card">
+      <div class="score-circle" id="scoreCircle">0</div>
+      <div class="result-title" id="resultTitle">生命力量化结果</div>
+      <div class="result-desc" id="resultDesc"></div>
+      <div class="dimension-scores" id="dimensionScores"></div>
+    </div>
+    <div class="tip-card" id="tipCard">
+      <h3>💡 老姜的建议</h3>
+      <p id="tipText"></p>
+    </div>
+    <button class="retest-btn" onclick="resetTest()">重新测评</button>
+  </div>
+
+</div>
+<div class="footer">老姜 · 说人话不装 · 聊健康交个朋友</div>
+
+<script>
+// ===== 题目数据 =====
+const questions = [
+  // 身体活力维度 (1-5题)
+  { text: '你早上醒来时的第一感觉是？', dimension: '身体活力', options: ['精力充沛，充满期待', '还行，能应付今天', '有点累，想再睡会儿', '非常疲惫，不想起床'] },
+  { text: '你的体力能支撑一天的工作和生活吗？', dimension: '身体活力', options: ['完全没问题', '大部分时间没问题', '有时候会撑不住', '经常感觉体力不支'] },
+  { text: '你每周运动几次？', dimension: '身体活力', options: ['3次以上', '1-2次', '偶尔运动', '几乎不运动'] },
+  { text: '你的睡眠质量如何？', dimension: '身体活力', options: ['睡得香，醒后精神好', '还行，偶尔睡不好', '经常睡不好', '长期失眠或睡眠质量差'] },
+  { text: '你的食欲和消化情况？', dimension: '身体活力', options: ['食欲好，消化正常', '还行，偶尔不适', '食欲一般，经常胃胀', '食欲差，消化问题多'] },
+  
+  // 心理能量维度 (6-10题)
+  { text: '你对未来是否充满期待？', dimension: '心理能量', options: ['是的，很有期待', '一般，按部就班', '有点迷茫', '很少期待未来'] },
+  { text: '遇到困难时，你的第一反应是？', dimension: '心理能量', options: ['想办法解决', '先焦虑一会儿', '想逃避', '容易放弃'] },
+  { text: '你最近一次发自内心的笑是什么时候？', dimension: '心理能量', options: ['今天', '这几天', '记不清了', '很久没有过了'] },
+  { text: '你是否有明确的生活目标？', dimension: '心理能量', options: ['有，很清晰', '有，但不太明确', '一直在寻找', '没有目标'] },
+  { text: '你对自己目前的生活满意吗？', dimension: '心理能量', options: ['很满意', '还行', '不太满意', '很不满意'] },
+  
+  // 生活热情维度 (11-15题)
+  { text: '你对什么事情还有兴趣和热情？', dimension: '生活热情', options: ['很多事都想尝试', '有几个感兴趣的事', '越来越少了', '几乎没有'] },
+  { text: '周末或假期，你最想做什么？', dimension: '生活热情', options: ['出去走走，做喜欢的事', '休息放松', '宅着，不知道干嘛', '什么都不想做'] },
+  { text: '你是否经常觉得"没意思"？', dimension: '生活热情', options: ['很少', '偶尔', '经常', '几乎总是'] },
+  { text: '你还有学习的动力吗？', dimension: '生活热情', options: ['有，想学很多东西', '有，但动力不足', '学不进去', '完全没有'] },
+  { text: '你对新事物的态度？', dimension: '生活热情', options: ['很好奇，想了解', '看情况', '不太关心', '抗拒改变'] },
+  
+  // 恢复能力维度 (16-20题)
+  { text: '遇到挫折后，你需要多久恢复？', dimension: '恢复能力', options: ['很快就能调整', '需要一两天', '需要很长时间', '很难恢复'] },
+  { text: '你的情绪稳定性如何？', dimension: '恢复能力', options: ['很稳定', '偶尔波动', '经常波动', '非常不稳定'] },
+  { text: '压力过后，你能放松下来吗？', dimension: '恢复能力', options: ['能，很快放松', '需要一点时间', '比较困难', '很难放松'] },
+  { text: '你是否经常感到"电量耗尽"？', dimension: '恢复能力', options: ['很少', '偶尔', '经常', '几乎每天'] },
+  { text: '你的身体恢复速度（如感冒后）？', dimension: '恢复能力', options: ['很快，体质好', '正常速度', '比较慢', '很慢，容易反复'] }
+];
+
+let currentQuestion = 0;
+let answers = new Array(20).fill(null);
+
+function startTest() {
+  document.getElementById('coverPage').style.display = 'none';
+  document.getElementById('quizPage').classList.add('active');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const progress = ((currentQuestion + 1) / 20 * 100).toFixed(0);
+  
+  document.getElementById('progressText').textContent = `第 ${currentQuestion + 1}/20 题`;
+  document.getElementById('progressFill').style.width = progress + '%';
+  
+  const container = document.getElementById('questionContainer');
+  container.innerHTML = `
+    <div class="question-card">
+      <div class="question-text">${currentQuestion + 1}. ${q.text}</div>
+      <div class="options">
+        ${q.options.map((opt, i) => `
+          <button class="option-btn ${answers[currentQuestion] === i ? 'selected' : ''}" 
+                  onclick="selectAnswer(${i})">
+            ${opt}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+    <div class="nav-btns">
+      ${currentQuestion > 0 ? '<button class="btn-prev" onclick="prevQuestion()">上一题</button>' : '<div></div>'}
+      <button class="btn-next" onclick="nextQuestion()" ${answers[currentQuestion] === null ? 'disabled' : ''}>
+        ${currentQuestion < 19 ? '下一题' : '查看结果'}
+      </button>
+    </div>
+  `;
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectAnswer(index) {
+  answers[currentQuestion] = index;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (currentQuestion < 19) {
+    currentQuestion++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizPage').classList.remove('active');
+  document.getElementById('resultPage').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  
+  // 计算维度分数
+  const dimensions = {
+    '身体活力': { total: 0, count: 0 },
+    '心理能量': { total: 0, count: 0 },
+    '生活热情': { total: 0, count: 0 },
+    '恢复能力': { total: 0, count: 0 }
+  };
+  
+  answers.forEach((ans, i) => {
+    const score = 10 - ans * 2.5; // 0=10分, 1=7.5分, 2=5分, 3=2.5分
+    const dim = questions[i].dimension;
+    dimensions[dim].total += score;
+    dimensions[dim].count++;
+  });
+  
+  const dimensionScores = {};
+  for (let key in dimensions) {
+    dimensionScores[key] = (dimensions[key].total / dimensions[key].count).toFixed(1);
+  }
+  
+  const totalScore = Object.values(dimensionScores).reduce((a, b) => parseFloat(a) + parseFloat(b), 0) / 4;
+  const avgScore = totalScore.toFixed(1);
+  
+  // 显示总分
+  const circle = document.getElementById('scoreCircle');
+  circle.textContent = avgScore;
+  circle.className = 'score-circle ' + (avgScore >= 7 ? 'high' : avgScore >= 5 ? 'medium' : 'low');
+  
+  // 结果标题和描述
+  let title, desc, tip;
+  if (avgScore >= 7) {
+    title = '🔋 生命力充沛！';
+    desc = '你的生命状态很好，继续保持！身体有活力，心理有能量，生活有热情。你是很多人的榜样。';
+    tip = '保持现在的节奏，多关注身体信号，定期给自己充电的时间。生命力像电池，需要持续维护。';
+  } else if (avgScore >= 5) {
+    title = '⚠️ 生命力中等';
+    desc = '你的生命力在"亚健康"状态。不是没电了，但也没充满。某些方面在透支，需要关注。';
+    tip = '找出得分最低的那个维度，先从那里入手改善。不是所有问题都要一起解决，先抓主要矛盾。';
+  } else {
+    title = '🔴 生命力不足';
+    desc = '你的生命力在报警！身体、心理、热情、恢复能力都在透支。这不是"累"，是身体在求救。';
+    tip = '建议先去医院做个体检，排除器质性问题。然后从睡眠、饮食、运动三个基础开始调整。别硬扛。';
+  }
+  
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultDesc').textContent = desc;
+  document.getElementById('tipText').textContent = tip;
+  
+  // 显示维度分数
+  const dimContainer = document.getElementById('dimensionScores');
+  dimContainer.innerHTML = Object.entries(dimensionScores).map(([name, score]) => {
+    const level = score >= 7 ? 'high' : score >= 5 ? 'medium' : 'low';
+    return `
+      <div class="dimension-item">
+        <div class="dimension-name">${name}</div>
+        <div class="dimension-value ${level}">${score}/10</div>
+      </div>
+    `;
+  }).join('');
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetTest() {
+  currentQuestion = 0;
+  answers = new Array(20).fill(null);
+  document.getElementById('resultPage').classList.remove('active');
+  document.getElementById('quizPage').classList.add('active');
+  document.getElementById('coverPage').style.display = 'block';
+  document.getElementById('progressFill').style.width = '0%';
+  renderQuestion();
+}
+</script>
+</body>
+</html>

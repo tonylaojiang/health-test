@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- 百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?43bbc21ca2dec962dd61345eb1379927";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>身体疲劳测评 | 老姜</title>
+<!-- 百度统计 -->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?替换为你的百度统计ID";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
+    color: #333;
+    min-height: 100vh;
+  }
+  .container { max-width: 700px; margin: 0 auto; padding: 20px; }
+  
+  .cover {
+    text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #4a2c5a 0%, #2d1f3d 100%);
+    border-radius: 20px;
+    color: white;
+    margin-bottom: 20px;
+  }
+  .cover h1 { font-size: 28px; margin-bottom: 15px; }
+  .cover .tagline { font-size: 18px; color: #a8e6cf; font-weight: bold; margin-bottom: 20px; }
+  .cover p { font-size: 14px; opacity: 0.8; line-height: 1.8; }
+  .start-btn {
+    margin-top: 30px;
+    background: #a8e6cf;
+    color: #1a1a2e;
+    border: none;
+    padding: 16px 50px;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .start-btn:hover { transform: scale(1.05); background: #88d4ab; }
+  
+  .progress-bar {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a8e6cf, #88d4ab);
+    border-radius: 10px;
+    transition: width 0.3s;
+    width: 0%;
+  }
+  .progress-text {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 15px;
+  }
+  
+  .quiz-page { display: none; }
+  .quiz-page.active { display: block; }
+  
+  .question-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  
+  .question-text {
+    font-size: 16px;
+    color: #222;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .option-btn {
+    padding: 14px 20px;
+    border-radius: 10px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .option-btn:hover { border-color: #a8e6cf; }
+  .option-btn.selected { 
+    background: #a8e6cf; 
+    color: #1a1a2e; 
+    border-color: #a8e6cf;
+    font-weight: bold;
+  }
+  
+  .nav-btns {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+  }
+  .btn-prev {
+    padding: 14px 30px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .btn-next {
+    flex: 1;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #a8e6cf;
+    color: #1a1a2e;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  .btn-next:disabled { background: #999; color: white; cursor: not-allowed; }
+  
+  .result-page { display: none; text-align: center; }
+  .result-page.active { display: block; }
+  
+  .result-card {
+    background: white;
+    border-radius: 20px;
+    padding: 35px 25px;
+    margin-bottom: 20px;
+  }
+  
+  .score-display {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .score-display.low { color: #4caf50; }
+  .score-display.medium { color: #ff9800; }
+  .score-display.high { color: #e94560; }
+  
+  .result-title { font-size: 22px; margin-bottom: 10px; color: #1a1a2e; }
+  .result-desc { font-size: 14px; color: #666; line-height: 1.8; }
+  
+  .symptom-list {
+    background: #f7f8fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: left;
+  }
+  .symptom-list h4 { font-size: 14px; color: #666; margin-bottom: 12px; }
+  .symptom-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 14px;
+  }
+  .symptom-item:last-child { border-bottom: none; }
+  
+  .tip-card {
+    background: linear-gradient(135deg, #4a2c5a, #2d1f3d);
+    color: white;
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .tip-card h3 { font-size: 16px; margin-bottom: 12px; color: #a8e6cf; }
+  .tip-card p { font-size: 14px; line-height: 1.8; opacity: 0.9; }
+  
+  .retest-btn {
+    background: white;
+    color: #4a2c5a;
+    border: 2px solid #a8e6cf;
+    padding: 14px 50px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 30px;
+    padding-bottom: 30px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 封面 -->
+  <div class="cover" id="coverPage">
+    <h1>😴 身体疲劳测评</h1>
+    <div class="tagline">你以为是累，其实身体在报警</div>
+    <p>
+      明明睡够了，还是觉得累？<br>
+      休息了也不解乏？<br>
+      这可能是身体在"报警"<br><br>
+      测测你的疲劳程度
+    </p>
+    <button class="start-btn" onclick="startTest()">开始测评</button>
+  </div>
+
+  <!-- 测评页面 -->
+  <div class="quiz-page" id="quizPage">
+    <div class="progress-text" id="progressText">第 1/15 题</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionContainer"></div>
+  </div>
+
+  <!-- 结果页面 -->
+  <div class="result-page" id="resultPage">
+    <div class="result-card">
+      <div class="score-display" id="scoreDisplay">0</div>
+      <div class="result-title" id="resultTitle">疲劳程度评估</div>
+      <div class="result-desc" id="resultDesc"></div>
+      <div class="symptom-list" id="symptomList"></div>
+    </div>
+    <div class="tip-card" id="tipCard">
+      <h3>💡 老姜的建议</h3>
+      <p id="tipText"></p>
+    </div>
+    <button class="retest-btn" onclick="resetTest()">重新测评</button>
+  </div>
+
+</div>
+<div class="footer">老姜 · 说人话不装 · 聊健康交个朋友</div>
+
+<script>
+// ===== 题目数据 =====
+const questions = [
+  { text: '你每天早上醒来时的感觉？', options: ['精神饱满', '稍微有点困', '很累，不想起床', '非常疲惫'] },
+  { text: '工作/做事时，你的专注力能维持多久？', options: ['2小时以上', '1-2小时', '30分钟-1小时', '很难集中注意力'] },
+  { text: '你是否经常觉得"没力气"？', options: ['很少', '偶尔', '经常', '几乎每天'] },
+  { text: '你的肌肉是否经常酸痛或僵硬？', options: ['很少', '偶尔', '经常', '几乎每天'] },
+  { text: '你是否经常头痛或头晕？', options: ['很少', '偶尔', '经常', '几乎每天'] },
+  { text: '你的睡眠质量如何？', options: ['很好，睡够了就精神', '还行，偶尔睡不好', '经常睡不好', '长期睡眠问题'] },
+  { text: '你是否感觉记忆力在下降？', options: ['没有', '有一点', '明显下降', '经常忘事'] },
+  { text: '你做事情是否越来越容易放弃？', options: ['不会', '偶尔会', '经常会', '几乎总是'] },
+  { text: '你是否对以前感兴趣的事情失去了兴趣？', options: ['没有', '有一点', '明显', '完全没兴趣了'] },
+  { text: '你的食欲如何？', options: ['很好', '还行', '一般', '很差'] },
+  { text: '你是否经常感冒或生病？', options: ['很少', '偶尔', '经常', '免疫力很差'] },
+  { text: '你是否经常感到心慌或胸闷？', options: ['很少', '偶尔', '经常', '几乎每天'] },
+  { text: '你的情绪状态如何？', options: ['稳定积极', '偶尔烦躁', '经常低落', '情绪很差'] },
+  { text: '休息后，疲劳感会缓解吗？', options: ['会，很快恢复', '会，但需要较长时间', '缓解不多', '几乎不缓解'] },
+  { text: '你觉得自己是否处于"过劳"状态？', options: ['没有', '可能有一点', '应该有', '肯定有'] }
+];
+
+let currentQuestion = 0;
+let answers = new Array(15).fill(null);
+
+function startTest() {
+  document.getElementById('coverPage').style.display = 'none';
+  document.getElementById('quizPage').classList.add('active');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const progress = ((currentQuestion + 1) / 15 * 100).toFixed(0);
+  
+  document.getElementById('progressText').textContent = `第 ${currentQuestion + 1}/15 题`;
+  document.getElementById('progressFill').style.width = progress + '%';
+  
+  const container = document.getElementById('questionContainer');
+  container.innerHTML = `
+    <div class="question-card">
+      <div class="question-text">${currentQuestion + 1}. ${q.text}</div>
+      <div class="options">
+        ${q.options.map((opt, i) => `
+          <button class="option-btn ${answers[currentQuestion] === i ? 'selected' : ''}" 
+                  onclick="selectAnswer(${i})">
+            ${opt}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+    <div class="nav-btns">
+      ${currentQuestion > 0 ? '<button class="btn-prev" onclick="prevQuestion()">上一题</button>' : '<div></div>'}
+      <button class="btn-next" onclick="nextQuestion()" ${answers[currentQuestion] === null ? 'disabled' : ''}>
+        ${currentQuestion < 14 ? '下一题' : '查看结果'}
+      </button>
+    </div>
+  `;
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function selectAnswer(index) {
+  answers[currentQuestion] = index;
+  renderQuestion();
+}
+
+function nextQuestion() {
+  if (currentQuestion < 14) {
+    currentQuestion++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQuestion() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizPage').classList.remove('active');
+  document.getElementById('resultPage').classList.add('active');
+  document.getElementById('progressFill').style.width = '100%';
+  
+  // 计算总分 (0-45分，分数越高越疲劳)
+  const totalScore = answers.reduce((sum, ans) => sum + ans, 0);
+  
+  // 统计症状
+  const symptoms = [];
+  const symptomNames = ['晨起疲劳', '专注力下降', '体力不足', '肌肉酸痛', '头痛头晕', '睡眠问题', 
+                        '记忆力下降', '容易放弃', '兴趣减退', '食欲不振', '免疫力下降', 
+                        '心慌胸闷', '情绪低落', '恢复能力差', '过劳状态'];
+  answers.forEach((ans, i) => {
+    if (ans >= 2) {
+      symptoms.push({ name: symptomNames[i], level: ans === 2 ? '轻度' : '明显' });
+    }
+  });
+  
+  // 显示结果
+  const scoreDisplay = document.getElementById('scoreDisplay');
+  scoreDisplay.textContent = totalScore + '分';
+  
+  let title, desc, tip, level;
+  if (totalScore <= 10) {
+    level = 'low';
+    title = '✅ 疲劳程度：正常';
+    desc = '你的身体状态良好，疲劳在正常范围内。继续保持好的作息习惯。';
+    tip = '虽然目前疲劳程度不高，但也要注意劳逸结合。建议每周保持适度运动，保证睡眠质量。';
+  } else if (totalScore <= 25) {
+    level = 'medium';
+    title = '⚠️ 疲劳程度：中等';
+    desc = '你的身体已经出现明显的疲劳信号，需要休息和调整。这不是"累了"，是身体在提醒你。';
+    tip = '建议：1）每天保证7-8小时睡眠；2）减少熬夜；3）每周至少运动2-3次；4）注意饮食规律。如果两周内没有改善，建议去医院检查。';
+  } else {
+    level = 'high';
+    title = '🔴 疲劳程度：严重';
+    desc = '你的身体已经处于"过劳"边缘，多个系统都在报警。这不是简单的累，需要认真对待。';
+    tip = '强烈建议：1）尽快去医院做全面体检；2）停止熬夜和过度工作；3）调整生活节奏；4）必要时寻求专业帮助。身体是革命的本钱，别硬扛。';
+  }
+  
+  scoreDisplay.className = 'score-display ' + level;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultDesc').textContent = desc;
+  document.getElementById('tipText').textContent = tip;
+  
+  // 显示症状列表
+  const symptomList = document.getElementById('symptomList');
+  if (symptoms.length > 0) {
+    symptomList.innerHTML = `
+      <h4>📋 你的疲劳症状清单</h4>
+      ${symptoms.map(s => `
+        <div class="symptom-item">
+          <span>${s.name}</span>
+          <span style="color: ${s.level === '明显' ? '#e94560' : '#ff9800'}">${s.level}</span>
+        </div>
+      `).join('')}
+    `;
+  } else {
+    symptomList.innerHTML = '<h4>📋 暂无明显疲劳症状</h4>';
+  }
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetTest() {
+  currentQuestion = 0;
+  answers = new Array(15).fill(null);
+  document.getElementById('resultPage').classList.remove('active');
+  document.getElementById('quizPage').classList.add('active');
+  document.getElementById('coverPage').style.display = 'block';
+  document.getElementById('progressFill').style.width = '0%';
+  renderQuestion();
+}
+</script>
+</body>
+</html>
